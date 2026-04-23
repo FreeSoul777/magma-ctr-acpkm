@@ -1,0 +1,32 @@
+gcc -Wall -Wextra -O2 -o magma src/main.c
+find src -name "*.c" -o -name "*.h" | xargs clang-format -i
+clang-format -i src/magma.c
+
+echo "Hello World! This is a secret message." > test.txt
+
+perl -e 'print pack("H*", "ffeeddccbbaa99887766554433221100f0f1f2f3f4f5f6f7f8f9fafbfcfdfeff")' > key.bin
+chmod 600 key.bin
+./magma --key-file key.bin enc test.txt test.enc
+./magma --key-file key.bin dec test.enc test.dec
+diff test.txt test.dec
+
+
+cd magma
+mkdir build && cd build
+
+cmake .. -DBUILD_TESTS=ON -DDEV_MODE=ON
+make
+
+./magma_tests
+
+cmake .. -DDEV_MODE=OFF
+make
+
+./magma --key-file key.bin enc test.txt test.enc
+./magma --key-file key.bin dec test.enc test.dec
+diff test.txt test.dec
+
+Проверяем crc32:
+echo " " >> ./magma
+
+./magma --key-file key.bin enc test.txt test.enc

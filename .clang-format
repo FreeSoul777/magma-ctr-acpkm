@@ -1,0 +1,44 @@
+---
+BasedOnStyle: LLVM
+IndentWidth: 4
+UseTab: Never
+ColumnLimit: 120
+
+BreakBeforeBraces: Allman
+AllowShortFunctionsOnASingleLine: Inline
+AllowShortIfStatementsOnASingleLine: false
+AllowShortLoopsOnASingleLine: false
+
+AlignConsecutiveAssignments: Consecutive
+AlignConsecutiveDeclarations: Consecutive
+AlignTrailingComments: true
+
+PointerAlignment: Left
+
+SpaceBeforeParens: ControlStatements
+
+AlwaysBreakAfterDefinitionReturnType: None
+AlwaysBreakBeforeMultilineStrings: false
+BreakBeforeBinaryOperators: NonAssignment
+
+IndentCaseLabels: true
+
+MaxEmptyLinesToKeep: 1
+
+SortIncludes: true
+IncludeBlocks:   Regroup
+IncludeCategories:
+  - Regex:           '^"[^"/]+\.(h|hpp)"'
+    Priority:        1
+  
+  - Regex:           '^"[^"]+\.(h|hpp)"'
+    Priority:        2
+  
+  - Regex:           '^"(gtest|gmock)/'
+    Priority:        3
+
+  - Regex:           '^<.*\.h>$'
+    Priority:        4
+  
+  - Regex:           '^<.*>$'
+    Priority:        5
