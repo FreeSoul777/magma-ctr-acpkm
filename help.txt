@@ -1,24 +1,42 @@
-gcc -Wall -Wextra -O2 -o magma src/main.c
+1. ФОРМАТИРОВАНИЕ КОДА
+--------------------------------------------------
 find src -name "*.c" -o -name "*.h" | xargs clang-format -i
 clang-format -i src/magma.c
 
+
+2. ПРОСТАЯ КОМПИЛЯЦИЯ (без CMake)
+--------------------------------------------------
+gcc -Wall -Wextra -O2 -o magma src/main.c
+
+
+3. ПОДГОТОВКА ТЕСТОВЫХ ДАННЫХ
+--------------------------------------------------
 echo "Hello World! This is a secret message." > test.txt
 
 perl -e 'print pack("H*", "ffeeddccbbaa99887766554433221100f0f1f2f3f4f5f6f7f8f9fafbfcfdfeff")' > key.bin
 chmod 600 key.bin
+
+
+4. ШИФРОВАНИЕ И ДЕШИФРОВАНИЕ (простая сборка)
+--------------------------------------------------
 ./magma --key-file key.bin enc test.txt test.enc
 ./magma --key-file key.bin dec test.enc test.dec
 diff test.txt test.dec
 
 
+5. СБОРКА С ТЕСТАМИ (CMake)
+--------------------------------------------------
 cd magma
-mkdir build && cd build
+mkdir -p build && cd build
 
 cmake .. -DBUILD_TESTS=ON -DDEV_MODE=ON
 make
 
 ./magma_tests
 
+
+6. СБОРКА RELEASE ВЕРСИИ (без тестов)
+--------------------------------------------------
 cmake .. -DDEV_MODE=OFF
 make
 
@@ -26,7 +44,12 @@ make
 ./magma --key-file key.bin dec test.enc test.dec
 diff test.txt test.dec
 
-Проверяем crc32:
+
+7. ПРОВЕРКА CRC32 (контроль целостности)
+--------------------------------------------------
+# Изменяем исполняемый файл (добавляем пробел)
 echo " " >> ./magma
 
+# Запуск должен завершиться ошибкой
 ./magma --key-file key.bin enc test.txt test.enc
+# Ожидаемый вывод: FATAL: Integrity check FAILED!
