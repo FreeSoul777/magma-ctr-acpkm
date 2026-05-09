@@ -1,5 +1,6 @@
 #include "core/ctr_acpkm.h"
 #include "utils/utils.h"
+#include "benchmark.h"
 
 #include <stdint.h>
 #include <stdio.h>
